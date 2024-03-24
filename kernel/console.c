@@ -10,6 +10,9 @@
 //
 
 #include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "types.h"
 #include "param.h"
@@ -24,6 +27,9 @@
 
 #define BACKSPACE 0x100
 #define C(x)  ((x)-'@')  // Control-x
+
+// define max size for history system call
+#define MAX_HISTORY 16
 
 //
 // send one character to the uart.
@@ -126,6 +132,30 @@ consoleread(int user_dst, uint64 dst, int n)
   return target - n;
 }
 
+//implement of history system call
+struct {
+    char bufferArr[MAX_HISTORY][INPUT_BUF_SIZE];
+    uint lengthsArr[MAX_HISTORY];
+    uint lastCommandIndex;
+    int numOfCommandsInMem;
+    int currentHistory;
+} historyBufferArray;
+
+void insertAtBeginning(char bufferArr[MAX_HISTORY][INPUT_BUF_SIZE], int size, char* newString) {
+
+    // Shift all existing strings to the right
+    for (int i = size; i > 0; i--) {
+        strcpy(bufferArr[i], bufferArr[i - 1]);
+    }
+
+    // Insert the new string at the beginning
+    strcpy(bufferArr[0], newString);
+
+    // Increment the size
+    size++;
+}
+
+
 //
 // the console input interrupt handler.
 // uartintr() calls this for input character.
@@ -166,6 +196,12 @@ consoleintr(int c)
       cons.buf[cons.e++ % INPUT_BUF_SIZE] = c;
 
       if(c == '\n' || c == C('D') || cons.e-cons.r == INPUT_BUF_SIZE){
+          if(historyBufferArray.numOfCommandsInMem == MAX_HISTORY){
+              insertAtBeginning(historyBufferArray.bufferArr, MAX_HISTORY - 1, cons.buf);
+          }
+          else{
+              insertAtBeginning(historyBufferArray.bufferArr, historyBufferArray.numOfCommandsInMem, cons.buf);
+          }
         // wake up consoleread() if a whole line (or end-of-file)
         // has arrived.
         cons.w = cons.e;
