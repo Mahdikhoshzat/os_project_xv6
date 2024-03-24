@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/defs.h
+
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/main.c
+types.h
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/types.h
+param.h
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/param.h
+memlayout.h
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/memlayout.h
+riscv.h
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/riscv.h
+defs.h
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/defs.h
+
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/memlayout.h
+
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/param.h
+
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/riscv.h
+
+C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/kernel/types.h
+
