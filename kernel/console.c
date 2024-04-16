@@ -9,9 +9,12 @@
 //   control-p -- print process list
 //
 
+//int history(int);
+
+
+#include "types.h"
 #include <stdarg.h>
 
-//#include "../user/user.h"
 #include "types.h"
 #include "param.h"
 #include "spinlock.h"
@@ -23,17 +26,25 @@
 #include "defs.h"
 #include "proc.h"
 
+#define MAX_HISTORY 16
 #define BACKSPACE 0x100
+//#define PGUP "\\E[5;2~"
+//#define PGDN "\\E[6;2~"
 #define C(x)  ((x)-'@')  // Control-x
 
-// define max size for history system call
-#define MAX_HISTORY 16
+historyBufferArray sharedStruct;
+historyBufferArray* sharedStructPtr = &sharedStruct;
 
-//
 // send one character to the uart.
 // called by printf(), and to echo input characters,
 // but not from write().
 //
+
+
+// count for up key
+int up_count = -1;
+
+
 void
 consputc(int c)
 {
@@ -130,7 +141,8 @@ consoleread(int user_dst, uint64 dst, int n)
   return target - n;
 }
 
-//implement of history system call
+
+////implement of history system call
 //struct {
 //    char bufferArr[MAX_HISTORY][INPUT_BUF_SIZE];
 //    uint lengthsArr[MAX_HISTORY];
@@ -139,19 +151,34 @@ consoleread(int user_dst, uint64 dst, int n)
 //    int currentHistory;
 //} historyBufferArray;
 
-//void insertAtBeginning(char bufferArr[MAX_HISTORY][INPUT_BUF_SIZE], int size, char* newString) {
-//
-//    // Shift all existing strings to the right
-//    for (int i = size; i > 0; i--) {
-//        strcpy(bufferArr[i], bufferArr[i - 1]);
-//    }
-//
-//    // Insert the new string at the beginning
-//    strcpy(bufferArr[0], newString);
-//
-//    // Increment the size
-//    size++;
-//}
+void insertAtBeginning(int size, char* newString) {
+    // Shift all existing strings to the right
+    for (int i = size; i > 0; i--) {
+        safestrcpy(sharedStruct.bufferArr[i], sharedStruct.bufferArr[i - 1], 128);
+    }
+    safestrcpy(sharedStruct.bufferArr[0], newString, 128);
+    sharedStruct.numOfCommandsInMem++;
+}
+
+char* firstWord(char* str) {
+    char* start = str; // Start of the string
+    while (*str != ' '&& *str != '\n' && *str != '\0') {
+        str++; // Move to the next character
+    }
+    *str = '\0'; // Replace the space or null terminator with a null terminator to end the first word
+    return start; // Return the start of the first word
+}
+
+int check_is_valid_command(char *commandRequested){
+    char commands_array[19][20] = {"README", "cat", "echo", "forktest", "grep", "init", "kill", "ln","ls", "mkdir", "rm", "sh",
+                                   "stressfs", "usertests", "grind", "wc","zombie", "console", "top"};
+    for (int i = 0; i < 19; ++i) {
+        if(strncmp(commandRequested, commands_array[i], 19) == 0){
+            return 0;
+        }
+    }
+    return 1;
+}
 
 
 //
@@ -164,51 +191,113 @@ void
 consoleintr(int c)
 {
   acquire(&cons.lock);
-
-  switch(c){
-  case C('P'):  // Print process list.
-    procdump();
-    break;
-  case C('U'):  // Kill line.
-    while(cons.e != cons.w &&
-          cons.buf[(cons.e-1) % INPUT_BUF_SIZE] != '\n'){
-      cons.e--;
-      consputc(BACKSPACE);
-    }
-    break;
-  case C('H'): // Backspace
-  case '\x7f': // Delete key
-    if(cons.e != cons.w){
-      cons.e--;
-      consputc(BACKSPACE);
-    }
-    break;
-  default:
-    if(c != 0 && cons.e-cons.r < INPUT_BUF_SIZE){
-      c = (c == '\r') ? '\n' : c;
-
-      // echo back to the user.
-      consputc(c);
-
-      // store for consumption by consoleread().
-      cons.buf[cons.e++ % INPUT_BUF_SIZE] = c;
-
-      if(c == '\n' || c == C('D') || cons.e-cons.r == INPUT_BUF_SIZE){
-//          if(historyBufferArray.numOfCommandsInMem == MAX_HISTORY){
-//              insertAtBeginning(historyBufferArray.bufferArr, MAX_HISTORY - 1, cons.buf);
-//          }
-//          else{
-//              insertAtBeginning(historyBufferArray.bufferArr, historyBufferArray.numOfCommandsInMem, cons.buf);
-//          }
-        // wake up consoleread() if a whole line (or end-of-file)
-        // has arrived.
-        cons.w = cons.e;
-        wakeup(&cons.r);
+  if(c == '\x1B'){
+      int c1 = uartgetc();
+      int c2 = uartgetc();
+      if(c1 == '[' && c2 == 'A'){
+          if(up_count == sharedStruct.numOfCommandsInMem - 1){
+              up_count = -1;
+          }
+          up_count++;
+          while(cons.e != cons.w &&
+                cons.buf[(cons.e-1) % INPUT_BUF_SIZE] != '\n'){
+              cons.e--;
+              consputc(BACKSPACE);
+          }
+          int x = 0;
+          while(sharedStruct.bufferArr[up_count][x] != '\0' && sharedStruct.bufferArr[up_count][x] != '\n'){
+              consputc(sharedStruct.bufferArr[up_count][x]);
+              cons.buf[cons.e++ % INPUT_BUF_SIZE] = sharedStruct.bufferArr[up_count][x];
+              x++;
+          }
+//          printf("%s", sharedStruct.bufferArr[up_count]);
       }
-    }
-    break;
+      else if(c1 == '[' && c2 == 'B'){
+          if(up_count != -1){
+              up_count--;
+              while(cons.e != cons.w &&
+                    cons.buf[(cons.e-1) % INPUT_BUF_SIZE] != '\n'){
+                  cons.e--;
+                  consputc(BACKSPACE);
+              }
+              int x = 0;
+              while(sharedStruct.bufferArr[up_count][x] != '\0' && sharedStruct.bufferArr[up_count][x] != '\n'){
+                  consputc(sharedStruct.bufferArr[up_count][x]);
+                  cons.buf[cons.e++ % INPUT_BUF_SIZE] = sharedStruct.bufferArr[up_count][x];
+                  x++;
+              }
+          }
+      }
   }
-  
+  else{
+      switch(c){
+          case C('P'):  // Print process list.
+              procdump();
+              break;
+          case C('U'):  // Kill line.
+              while(cons.e != cons.w &&
+                    cons.buf[(cons.e-1) % INPUT_BUF_SIZE] != '\n'){
+                  cons.e--;
+                  consputc(BACKSPACE);
+              }
+              break;
+//  case "\E[5;2~":  // Kill line.
+//      while(cons.e != cons.w &&
+//            cons.buf[(cons.e-1) % INPUT_BUF_SIZE] != '\n'){
+//          cons.e--;
+//          consputc(BACKSPACE);
+//      }
+//          printf("\nhello Mahdi");
+//      break;
+          case C('H'): // Backspace
+          case '\x7f': // Delete key
+              if(cons.e != cons.w){
+                  cons.e--;
+                  consputc(BACKSPACE);
+              }
+              break;
+          default:
+              if(c != 0 && cons.e-cons.r < INPUT_BUF_SIZE){
+                  c = (c == '\r') ? '\n' : c;
+
+                  // echo back to the user.
+                  consputc(c);
+
+                  // store for consumption by consoleread().
+                  cons.buf[cons.e++ % INPUT_BUF_SIZE] = c;
+
+                  if(c == '\n' || c == C('D') || cons.e-cons.r == INPUT_BUF_SIZE){
+                      char* cpSentence = "";
+                      safestrcpy(cpSentence, &cons.buf[cons.r],128);
+                      char* first_word = firstWord(cpSentence);
+                      if(check_is_valid_command(first_word) == 0){
+                          if(sharedStruct.numOfCommandsInMem == MAX_HISTORY){
+                              if(strncmp(&cons.buf[cons.r], sharedStruct.bufferArr[0], 19) != 0){
+                                  insertAtBeginning(MAX_HISTORY - 1, &cons.buf[cons.r]);
+                              }
+                          }
+                          else{
+                              if(strncmp(&cons.buf[cons.r], sharedStruct.bufferArr[0], 19) != 0){
+                                  insertAtBeginning(sharedStruct.numOfCommandsInMem, &cons.buf[cons.r]);
+                              }
+
+                          }
+                      }
+                      else if(check_is_valid_command(first_word) == 1){
+//              printf("\nInvalid command brooooooooooooooo!\n");
+                      }
+                      // wake up consoleread() if a whole line (or end-of-file)
+                      // has arrived.
+                      up_count = -1;
+                      cons.w = cons.e;
+                      wakeup(&cons.r);
+                  }
+              }
+              break;
+      }
+
+  }
+
   release(&cons.lock);
 }
 

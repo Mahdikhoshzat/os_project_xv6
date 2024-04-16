@@ -12,10 +12,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a4586d75-86b6-492d-b2ca-66aed70c2f32" name="Changes" comment="add feature of add to history">
-      <change afterPath="$PROJECT_DIR$/user/history.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/top.c" afterDir="false" />
-    </list>
+    <list default="true" id="a4586d75-86b6-492d-b2ca-66aed70c2f32" name="Changes" comment="add feature of add to history" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,7 +104,7 @@
       <workItem from="1711367455922" duration="230000" />
       <workItem from="1711701184544" duration="113000" />
       <workItem from="1712139412063" duration="58000" />
-      <workItem from="1713287043305" duration="344000" />
+      <workItem from="1713287043305" duration="441000" />
     </task>
     <task id="LOCAL-00001" summary="add feature of add to history">
       <created>1711318021788</created>
