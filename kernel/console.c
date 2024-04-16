@@ -10,10 +10,8 @@
 //
 
 #include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
+//#include "../user/user.h"
 #include "types.h"
 #include "param.h"
 #include "spinlock.h"
@@ -133,27 +131,27 @@ consoleread(int user_dst, uint64 dst, int n)
 }
 
 //implement of history system call
-struct {
-    char bufferArr[MAX_HISTORY][INPUT_BUF_SIZE];
-    uint lengthsArr[MAX_HISTORY];
-    uint lastCommandIndex;
-    int numOfCommandsInMem;
-    int currentHistory;
-} historyBufferArray;
+//struct {
+//    char bufferArr[MAX_HISTORY][INPUT_BUF_SIZE];
+//    uint lengthsArr[MAX_HISTORY];
+//    uint lastCommandIndex;
+//    int numOfCommandsInMem;
+//    int currentHistory;
+//} historyBufferArray;
 
-void insertAtBeginning(char bufferArr[MAX_HISTORY][INPUT_BUF_SIZE], int size, char* newString) {
-
-    // Shift all existing strings to the right
-    for (int i = size; i > 0; i--) {
-        strcpy(bufferArr[i], bufferArr[i - 1]);
-    }
-
-    // Insert the new string at the beginning
-    strcpy(bufferArr[0], newString);
-
-    // Increment the size
-    size++;
-}
+//void insertAtBeginning(char bufferArr[MAX_HISTORY][INPUT_BUF_SIZE], int size, char* newString) {
+//
+//    // Shift all existing strings to the right
+//    for (int i = size; i > 0; i--) {
+//        strcpy(bufferArr[i], bufferArr[i - 1]);
+//    }
+//
+//    // Insert the new string at the beginning
+//    strcpy(bufferArr[0], newString);
+//
+//    // Increment the size
+//    size++;
+//}
 
 
 //
@@ -196,12 +194,12 @@ consoleintr(int c)
       cons.buf[cons.e++ % INPUT_BUF_SIZE] = c;
 
       if(c == '\n' || c == C('D') || cons.e-cons.r == INPUT_BUF_SIZE){
-          if(historyBufferArray.numOfCommandsInMem == MAX_HISTORY){
-              insertAtBeginning(historyBufferArray.bufferArr, MAX_HISTORY - 1, cons.buf);
-          }
-          else{
-              insertAtBeginning(historyBufferArray.bufferArr, historyBufferArray.numOfCommandsInMem, cons.buf);
-          }
+//          if(historyBufferArray.numOfCommandsInMem == MAX_HISTORY){
+//              insertAtBeginning(historyBufferArray.bufferArr, MAX_HISTORY - 1, cons.buf);
+//          }
+//          else{
+//              insertAtBeginning(historyBufferArray.bufferArr, historyBufferArray.numOfCommandsInMem, cons.buf);
+//          }
         // wake up consoleread() if a whole line (or end-of-file)
         // has arrived.
         cons.w = cons.e;
