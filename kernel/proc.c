@@ -111,11 +111,10 @@ static struct proc*
 allocproc(void)
 {
   struct proc *p;
-
   for(p = proc; p < &proc[NPROC]; p++) {
     acquire(&p->lock);
     if(p->state == UNUSED) {
-      goto found;
+        goto found;
     } else {
       release(&p->lock);
     }
@@ -312,7 +311,8 @@ fork(void)
   safestrcpy(np->name, p->name, sizeof(p->name));
 
   pid = np->pid;
-
+  np->ctime = ticks;
+  np->rtime = 0;
   release(&np->lock);
 
   acquire(&wait_lock);
@@ -442,34 +442,126 @@ wait(uint64 addr)
 //  - swtch to start running that process.
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
+//void
+//scheduler(void)
+//{
+//    struct proc *p;
+//    struct cpu *c = mycpu();
+////    uint start_ticks, end_ticks;
+//
+//    c->proc = 0;
+//    for(;;){
+//        // Avoid deadlock by ensuring that devices can interrupt.
+//        intr_on();
+//
+//        for(p = proc; p < &proc[NPROC]; p++) {
+//            acquire(&p->lock);
+//            if(p->state == RUNNABLE) {
+//                // Switch to chosen process.  It is the process's job
+//                // to release its lock and then reacquire it
+//                // before jumping back to us.
+//
+////                start_ticks = ticks;
+//
+//                p->state = RUNNING;
+//                p->rtime++;
+//                c->proc = p;
+//                swtch(&c->context, &p->context);
+//
+////                acquire(&tickslock);
+////                ticks++;
+////                release(&tickslock);
+////                end_ticks = ticks;
+////                p->rtime += (end_ticks - start_ticks);
+//                // Process is done running for now.
+//                // It should have changed its p->state before coming back.
+//                c->proc = 0;
+//            }
+//            release(&p->lock);
+//        }
+//    }
+//}
+
 void
 scheduler(void)
 {
-  struct proc *p;
-  struct cpu *c = mycpu();
+    struct proc *p;
+    struct cpu *c = mycpu();
 
-  c->proc = 0;
-  for(;;){
-    // Avoid deadlock by ensuring that devices can interrupt.
-    intr_on();
+    c->proc = 0;
+    int turn = 0;
+    int candidate = 0;
 
-    for(p = proc; p < &proc[NPROC]; p++) {
-      acquire(&p->lock);
-      if(p->state == RUNNABLE) {
-        // Switch to chosen process.  It is the process's job
-        // to release its lock and then reacquire it
-        // before jumping back to us.
-        p->state = RUNNING;
-        c->proc = p;
-        swtch(&c->context, &p->context);
+    static int qs[] = {5, 10, 20};
+//    int j;
 
-        // Process is done running for now.
-        // It should have changed its p->state before coming back.
-        c->proc = 0;
-      }
-      release(&p->lock);
+    for(;;){
+//        printf("\n");
+//        printf("The loop for turn %d\n", turn);
+        intr_on();
+//        j = 0;
+        for(p = proc; p < &proc[NPROC]; p++) {
+//            j++;
+//            printf("searching for j = %d\n", j);
+            acquire(&p->lock);
+            if (p->priority == turn && p->state == RUNNABLE) {
+                candidate = 1;
+//                p->state = RUNNING;
+//                c->proc = p;
+                int q = qs[p->priority];
+//                printf("A process found with pid %d with priority %d\n", p->pid, p->priority);
+//                printf("The q value for this process is %d\n", q);
+                printf("The process %d with priority %d is going to be scheduled for %d quantum\n", p->pid, p->priority, q);
+                for (int i = 0; i < q; i++) {
+//                    printf("i is %d\n", i);
+                    p->state = RUNNING;
+                    p->rtime++;
+                    c->proc = p;
+                    swtch(&c->context, &p->context);
+//                    printf("Process %d: quantum %d\n", p->pid, i+1);
+//                    printf("The process state is %d\n", p->state);
+                    if (p->state == ZOMBIE || p->state == UNUSED) {
+                        break;
+                    }
+                }
+                printf("The process %d's execution is gonna be stopped.\n", p->pid, q);
+                if(p->priority < 2){
+                    p->priority++;
+                }
+                c->proc = 0;
+            }
+            release(&p->lock);
+        }
+        if (candidate) {
+            candidate = 0;
+            turn = 0;
+        }
+        else {
+//            printf("\n");
+//            printf("No process found with priority %d\n", turn);
+            turn += 1;
+            turn %= 3;
+        }
     }
-  }
+}
+
+
+uint
+getctime(struct proc *p)
+{
+    acquire(&p->lock);
+    uint ctime = p->ctime;
+    release(&p->lock);
+    return ctime;
+}
+
+uint
+getrtime(struct proc *p)
+{
+    acquire(&p->lock);
+    uint rtime = p->rtime;
+    release(&p->lock);
+    return rtime;
 }
 
 // Switch to scheduler.  Must hold only p->lock
@@ -490,7 +582,8 @@ sched(void)
   if(mycpu()->noff != 1)
     panic("sched locks");
   if(p->state == RUNNING)
-    panic("sched running");
+      panic("sched running");
+
   if(intr_get())
     panic("sched interruptible");
 
@@ -737,12 +830,9 @@ int count_total_processes(void) {
     return count;
 }
 
-void print_process_info(void) {
-
-}
-
 
 uint64 top(struct top_system_struct* top_result){
+//    for(volatile int i = 0; i < 1000000; i++);
     top_result->uptime = ticks / 10;
     top_result->running_process = count_running_processes();
     top_result->sleeping_process = count_sleeping_processes();
@@ -767,7 +857,12 @@ uint64 top(struct top_system_struct* top_result){
             continue;
         }
         else{
+            top_result->ticktick = keepRunning;
             top_result->p_list[cnt].pid = p->pid;
+//            top_result->p_list[cnt].time = p->ctime;
+            top_result->p_list[cnt].time = (ticks - getctime(p)) / 10;
+            top_result->p_list[cnt].cpu_usage = (getrtime(p) * 10) / top_result->uptime;
+//            top_result->p_list[cnt].cpu_usage = getrtime(p) / top_result->uptime;
             strncpy(top_result->p_list[cnt].name, p->name,16);
             strncpy(top_result->p_list[cnt].state, states[p->state],10);
             if(p->parent != 0) {

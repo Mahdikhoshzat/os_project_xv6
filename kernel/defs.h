@@ -18,6 +18,8 @@ extern historyBufferArray* sharedStructPtr;
 
 #endif
 
+extern int keepRunning;
+
 struct buf;
 struct context;
 struct file;
@@ -129,6 +131,7 @@ int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
 uint64          history(int);
 uint64          top(struct top_system_struct*);
+uint64          ctrl_c(void);
 
 // swtch.S
 void            swtch(struct context*, struct context*);

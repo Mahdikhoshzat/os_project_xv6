@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6
+# Install script for directory: C:/Users/LENOVO/Desktop/osProject/xv6-riscv/xv6-riscv
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/LENOVO/Desktop/osProject/xv6-riscv/os_project_xv6/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/LENOVO/Desktop/osProject/xv6-riscv/xv6-riscv/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

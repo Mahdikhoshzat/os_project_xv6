@@ -25,6 +25,7 @@
 #include "riscv.h"
 #include "defs.h"
 #include "proc.h"
+#include "top.h"
 
 #define MAX_HISTORY 16
 #define BACKSPACE 0x100
@@ -39,8 +40,8 @@ historyBufferArray* sharedStructPtr = &sharedStruct;
 // called by printf(), and to echo input characters,
 // but not from write().
 //
-
-
+int keepRunning = 0;
+//int ctrl_c_pressed = 0;
 // count for up key
 int up_count = -1;
 
@@ -180,6 +181,7 @@ int check_is_valid_command(char *commandRequested){
     return 1;
 }
 
+struct proc *p;
 
 //
 // the console input interrupt handler.
@@ -231,6 +233,17 @@ consoleintr(int c)
   }
   else{
       switch(c){
+          case C('C'):  // Control-C
+//              ctrl_c_pressed = 1;
+              keepRunning = 1;
+              // send a signal to the current process to stop
+//              printf("\nhello\n");
+//              p = myproc();
+//              printf("\nhello1\n");
+//              p->killed = 1;
+//              printf("\nhello2\n");
+//              yield();  // force a context switch
+              break;
           case C('P'):  // Print process list.
               procdump();
               break;

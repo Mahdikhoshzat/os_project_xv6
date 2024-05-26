@@ -56,10 +56,10 @@ RM = "C:\Program Files\JetBrains\CLion 2021.2.2\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\LENOVO\Desktop\osProject\xv6-riscv\os_project_xv6
+CMAKE_SOURCE_DIR = C:\Users\LENOVO\Desktop\osProject\xv6-riscv\xv6-riscv
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\LENOVO\Desktop\osProject\xv6-riscv\os_project_xv6\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\LENOVO\Desktop\osProject\xv6-riscv\xv6-riscv\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\LENOVO\Desktop\osProject\xv6-riscv\os_project_xv6\cmake-build-debug\CMakeFiles C:\Users\LENOVO\Desktop\osProject\xv6-riscv\os_project_xv6\cmake-build-debug\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\LENOVO\Desktop\osProject\xv6-riscv\xv6-riscv\cmake-build-debug\CMakeFiles C:\Users\LENOVO\Desktop\osProject\xv6-riscv\xv6-riscv\cmake-build-debug\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\LENOVO\Desktop\osProject\xv6-riscv\os_project_xv6\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\LENOVO\Desktop\osProject\xv6-riscv\xv6-riscv\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -848,6 +848,30 @@ user/grind.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\xv6_riscv.dir\build.make CMakeFiles/xv6_riscv.dir/user/grind.c.s
 .PHONY : user/grind.c.s
 
+user/history.obj: user/history.c.obj
+.PHONY : user/history.obj
+
+# target to build an object file
+user/history.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\xv6_riscv.dir\build.make CMakeFiles/xv6_riscv.dir/user/history.c.obj
+.PHONY : user/history.c.obj
+
+user/history.i: user/history.c.i
+.PHONY : user/history.i
+
+# target to preprocess a source file
+user/history.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\xv6_riscv.dir\build.make CMakeFiles/xv6_riscv.dir/user/history.c.i
+.PHONY : user/history.c.i
+
+user/history.s: user/history.c.s
+.PHONY : user/history.s
+
+# target to generate assembly for a file
+user/history.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\xv6_riscv.dir\build.make CMakeFiles/xv6_riscv.dir/user/history.c.s
+.PHONY : user/history.c.s
+
 user/init.obj: user/init.c.obj
 .PHONY : user/init.obj
 
@@ -1063,6 +1087,30 @@ user/stressfs.s: user/stressfs.c.s
 user/stressfs.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\xv6_riscv.dir\build.make CMakeFiles/xv6_riscv.dir/user/stressfs.c.s
 .PHONY : user/stressfs.c.s
+
+user/top.obj: user/top.c.obj
+.PHONY : user/top.obj
+
+# target to build an object file
+user/top.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\xv6_riscv.dir\build.make CMakeFiles/xv6_riscv.dir/user/top.c.obj
+.PHONY : user/top.c.obj
+
+user/top.i: user/top.c.i
+.PHONY : user/top.i
+
+# target to preprocess a source file
+user/top.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\xv6_riscv.dir\build.make CMakeFiles/xv6_riscv.dir/user/top.c.i
+.PHONY : user/top.c.i
+
+user/top.s: user/top.c.s
+.PHONY : user/top.s
+
+# target to generate assembly for a file
+user/top.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\xv6_riscv.dir\build.make CMakeFiles/xv6_riscv.dir/user/top.c.s
+.PHONY : user/top.c.s
 
 user/ulib.obj: user/ulib.c.obj
 .PHONY : user/ulib.obj
@@ -1283,6 +1331,9 @@ help:
 	@echo ... user/grind.obj
 	@echo ... user/grind.i
 	@echo ... user/grind.s
+	@echo ... user/history.obj
+	@echo ... user/history.i
+	@echo ... user/history.s
 	@echo ... user/init.obj
 	@echo ... user/init.i
 	@echo ... user/init.s
@@ -1310,6 +1361,9 @@ help:
 	@echo ... user/stressfs.obj
 	@echo ... user/stressfs.i
 	@echo ... user/stressfs.s
+	@echo ... user/top.obj
+	@echo ... user/top.i
+	@echo ... user/top.s
 	@echo ... user/ulib.obj
 	@echo ... user/ulib.i
 	@echo ... user/ulib.s

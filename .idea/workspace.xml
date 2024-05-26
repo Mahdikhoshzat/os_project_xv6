@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated />
   </component>
@@ -12,7 +9,32 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a4586d75-86b6-492d-b2ca-66aed70c2f32" name="Changes" comment="add feature of add to history" />
+    <list default="true" id="a4586d75-86b6-492d-b2ca-66aed70c2f32" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.20.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.20.2/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.20.2/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.20.2/CMakeDetermineCompilerABI_CXX.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.20.2/CompilerIdC/a.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.20.2/CompilerIdC/a.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.20.2/CompilerIdCXX/a.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.20.2/CompilerIdCXX/a.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/xv6_riscv.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/xv6_riscv.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/console.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/console.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/defs.h" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/defs.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/proc.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/proc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/proc.h" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/proc.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/syscall.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/syscall.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/sysproc.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/sysproc.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/top.h" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/top.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/kernel/trap.c" beforeDir="false" afterPath="$PROJECT_DIR$/kernel/trap.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/top.c" beforeDir="false" afterPath="$PROJECT_DIR$/user/top.c" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,11 +42,6 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
-  </component>
-  <component name="ExternalProjectsData">
-    <projectState path="$PROJECT_DIR$">
-      <ProjectState />
-    </projectState>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -36,33 +53,6 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
-  </component>
-  <component name="MakefileLocalSettings">
-    <option name="availableProjects">
-      <map>
-        <entry>
-          <key>
-            <ExternalProjectPojo>
-              <option name="name" value="os_project_xv6" />
-              <option name="path" value="$PROJECT_DIR$" />
-            </ExternalProjectPojo>
-          </key>
-          <value>
-            <list>
-              <ExternalProjectPojo>
-                <option name="name" value="xv6-riscv" />
-                <option name="path" value="$PROJECT_DIR$" />
-              </ExternalProjectPojo>
-            </list>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="projectSyncType">
-      <map>
-        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
-      </map>
-    </option>
   </component>
   <component name="ProjectId" id="2e3qHkqZxvKXoNdvVFZCpNE52Ns" />
   <component name="ProjectViewState">
@@ -83,6 +73,16 @@
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="gdb kernel" type="CLion_Remote" version="1" remoteCommand="127.0.0.1:12331" symbolFile="$PROJECT_DIR$/kernel/kernel" sysroot="">
+      <debugger kind="GDB" isBundled="true" />
+      <pathMapping remote=":/home/xv6/xv6-riscv" local="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -98,20 +98,53 @@
       <option name="presentableId" value="Default" />
       <updated>1711143523640</updated>
       <workItem from="1711143525193" duration="675000" />
-      <workItem from="1711185092248" duration="7138000" />
-      <workItem from="1711303385657" duration="7725000" />
-      <workItem from="1711360371965" duration="1462000" />
-      <workItem from="1711367455922" duration="230000" />
-      <workItem from="1711701184544" duration="113000" />
-      <workItem from="1712139412063" duration="58000" />
-      <workItem from="1713287043305" duration="441000" />
+      <workItem from="1711184169651" duration="597000" />
+      <workItem from="1711185070738" duration="7000" />
+      <workItem from="1711367689639" duration="261000" />
+      <workItem from="1711367964968" duration="5160000" />
+      <workItem from="1711387314672" duration="597000" />
+      <workItem from="1711634453733" duration="9000" />
+      <workItem from="1711701098570" duration="171000" />
+      <workItem from="1711701299970" duration="1561000" />
+      <workItem from="1711736228979" duration="9279000" />
+      <workItem from="1711788984831" duration="738000" />
+      <workItem from="1711789742048" duration="8502000" />
+      <workItem from="1711799867578" duration="4445000" />
+      <workItem from="1711887159483" duration="937000" />
+      <workItem from="1711906712447" duration="2096000" />
+      <workItem from="1711909347569" duration="4911000" />
+      <workItem from="1711926736471" duration="2961000" />
+      <workItem from="1711962615776" duration="19795000" />
+      <workItem from="1712012956230" duration="1166000" />
+      <workItem from="1712132452816" duration="5881000" />
+      <workItem from="1712139167733" duration="17550000" />
+      <workItem from="1712162584918" duration="1603000" />
+      <workItem from="1712164641454" duration="334000" />
+      <workItem from="1712233450580" duration="2000" />
+      <workItem from="1712234494581" duration="172000" />
+      <workItem from="1712924439571" duration="8777000" />
+      <workItem from="1712940223890" duration="738000" />
+      <workItem from="1713287004649" duration="484000" />
+      <workItem from="1714458054970" duration="425000" />
+      <workItem from="1714460424894" duration="533000" />
+      <workItem from="1714464716474" duration="3090000" />
+      <workItem from="1714482774537" duration="2264000" />
+      <workItem from="1715619023441" duration="9724000" />
+      <workItem from="1716058157401" duration="3436000" />
+      <workItem from="1716368067251" duration="5543000" />
+      <workItem from="1716477523918" duration="9059000" />
+      <workItem from="1716537313273" duration="9714000" />
+      <workItem from="1716556356175" duration="20268000" />
+      <workItem from="1716619783026" duration="4931000" />
+      <workItem from="1716643442969" duration="2963000" />
+      <workItem from="1716745779473" duration="1697000" />
     </task>
-    <task id="LOCAL-00001" summary="add feature of add to history">
-      <created>1711318021788</created>
+    <task id="LOCAL-00001" summary="phase2 finish">
+      <created>1716747285974</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1711318021788</updated>
+      <updated>1716747285974</updated>
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
@@ -120,7 +153,7 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add feature of add to history" />
-    <option name="LAST_COMMIT_MESSAGE" value="add feature of add to history" />
+    <MESSAGE value="phase2 finish" />
+    <option name="LAST_COMMIT_MESSAGE" value="phase2 finish" />
   </component>
 </project>

@@ -84,6 +84,9 @@ enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 // Per-process state
 struct proc {
   struct spinlock lock;
+  // add creation time field and running for faz 2
+//  uint64 creation_time;
+//  uint64 running_time;
 
   // p->lock must be held when using these:
   enum procstate state;        // Process state
@@ -104,19 +107,7 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  int priority;
+  uint64 ctime; // Creation time in ticks
+  uint64 rtime; // Running time in ticks
 };
-
-//struct proc_info{
-//    char name[16];
-//    int pid;
-//    int ppid;
-//    enum procstate state;
-//};
-//
-//struct top_system_struct {
-//    long uptime;
-//    int total_process;
-//    int running_process;
-//    int sleeping_process;
-//    struct proc_info p_list[NPROC];
-//};
