@@ -87,6 +87,7 @@ struct proc {
   // add creation time field and running for faz 2
 //  uint64 creation_time;
 //  uint64 running_time;
+    int pages_used;
 
   // p->lock must be held when using these:
   enum procstate state;        // Process state

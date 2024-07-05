@@ -6,6 +6,7 @@
 #include "proc.h"
 #include "defs.h"
 #include "top.h"
+#include "kalloc.h"
 
 struct cpu cpus[NCPU];
 
@@ -162,6 +163,7 @@ freeproc(struct proc *p)
     proc_freepagetable(p->pagetable, p->sz);
   p->pagetable = 0;
   p->sz = 0;
+  p->pages_used = 0;
   p->pid = 0;
   p->parent = 0;
   p->name[0] = 0;
@@ -256,22 +258,26 @@ userinit(void)
 
 // Grow or shrink user memory by n bytes.
 // Return 0 on success, -1 on failure.
-int
-growproc(int n)
-{
-  uint64 sz;
-  struct proc *p = myproc();
+int growproc(int n) {
+    uint64 sz;
+    struct proc *p = myproc();
 
-  sz = p->sz;
-  if(n > 0){
-    if((sz = uvmalloc(p->pagetable, sz, sz + n, PTE_W)) == 0) {
-      return -1;
+    sz = p->sz;
+    if (n > 0) {
+        if ((sz = uvmalloc(p->pagetable, sz, sz + n, PTE_W)) == 0) {
+            return -1;
+        }
+        acquire(&p->lock);
+        p->pages_used = sz / PGSIZE;  // Update pages_used
+        release(&p->lock);
+    } else if (n < 0) {
+        sz = uvmdealloc(p->pagetable, sz, sz + n);
+        acquire(&p->lock);
+        p->pages_used = sz / PGSIZE;  // Update pages_used
+        release(&p->lock);
     }
-  } else if(n < 0){
-    sz = uvmdealloc(p->pagetable, sz, sz + n);
-  }
-  p->sz = sz;
-  return 0;
+    p->sz = sz;
+    return 0;
 }
 
 // Create a new process, copying the parent.
@@ -295,6 +301,7 @@ fork(void)
     return -1;
   }
   np->sz = p->sz;
+  np->pages_used = p->sz / PGSIZE;
 
   // copy saved user registers.
   *(np->trapframe) = *(p->trapframe);
@@ -511,7 +518,7 @@ scheduler(void)
                 int q = qs[p->priority];
 //                printf("A process found with pid %d with priority %d\n", p->pid, p->priority);
 //                printf("The q value for this process is %d\n", q);
-                printf("The process %d with priority %d is going to be scheduled for %d quantum\n", p->pid, p->priority, q);
+                //printf("The process %d with priority %d is going to be scheduled for %d quantum\n", p->pid, p->priority, q);
                 for (int i = 0; i < q; i++) {
 //                    printf("i is %d\n", i);
                     p->state = RUNNING;
@@ -524,7 +531,7 @@ scheduler(void)
                         break;
                     }
                 }
-                printf("The process %d's execution is gonna be stopped.\n", p->pid, q);
+                //printf("The process %d's execution is gonna be stopped.\n", p->pid, q);
                 if(p->priority < 2){
                     p->priority++;
                 }
@@ -830,14 +837,27 @@ int count_total_processes(void) {
     return count;
 }
 
+kmemHelp sharedStruct1;
+kmemHelp * kmemHelpSharedStructPtr = &sharedStruct1;
+//extern struct kmem kmem;
+//extern struct spinlock kmem_lock;
 
 uint64 top(struct top_system_struct* top_result){
 //    for(volatile int i = 0; i < 1000000; i++);
+    int used_memo = 0;
     top_result->uptime = ticks / 10;
     top_result->running_process = count_running_processes();
     top_result->sleeping_process = count_sleeping_processes();
     top_result->total_process = count_total_processes();
-
+    top_result->total_memory = kmemHelpSharedStructPtr->total_pages * PGSIZE;
+//    acquire(&kmem.lock);
+//    int total_memory = kmemHelpSharedStructPtr->total_pages * PGSIZE;
+//    int used_memory = (kmemHelpSharedStructPtr->total_pages - kmemHelpSharedStructPtr->free_pages) * PGSIZE;
+//    int free_memory = kmemHelpSharedStructPtr->free_pages * PGSIZE;
+//    release(&kmem.lock);
+//    printf("Total Memory: %d KB\n", total_memory / 1024);
+//    printf("Used Memory: %d KB\n", used_memory / 1024);
+//    printf("Free Memory: %d KB\n", free_memory / 1024);
 
     char *states[] = {
             [UNUSED]    "unused",
@@ -859,8 +879,10 @@ uint64 top(struct top_system_struct* top_result){
         else{
             top_result->ticktick = keepRunning;
             top_result->p_list[cnt].pid = p->pid;
+            top_result->p_list[cnt].mem_usage = p->pages_used * PGSIZE;
+            used_memo += top_result->p_list[cnt].mem_usage;
 //            top_result->p_list[cnt].time = p->ctime;
-            top_result->p_list[cnt].time = (ticks - getctime(p)) / 10;
+            top_result->p_list[cnt].time = (top_result->uptime * 10 - getctime(p)) / 10;
             top_result->p_list[cnt].cpu_usage = (getrtime(p) * 10) / top_result->uptime;
 //            top_result->p_list[cnt].cpu_usage = getrtime(p) / top_result->uptime;
             strncpy(top_result->p_list[cnt].name, p->name,16);
@@ -874,5 +896,7 @@ uint64 top(struct top_system_struct* top_result){
         cnt++;
     }
     release(&pid_lock);
+    top_result->memoty_usage = used_memo;
+    top_result->unused = top_result->total_memory - top_result->memoty_usage;
     return 0;
 }

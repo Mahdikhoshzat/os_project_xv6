@@ -9,6 +9,7 @@ struct proc_info {
     int ppid;
     int time;
     int cpu_usage;
+    int mem_usage;
     char state[10];
 };
 
@@ -18,6 +19,9 @@ struct top_system_struct {
     int total_process;
     int running_process;
     int sleeping_process;
+    int total_memory;
+    int unused;
+    int memoty_usage;
     struct proc_info p_list[NPROC];
 };
 

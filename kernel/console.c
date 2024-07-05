@@ -275,7 +275,9 @@ consoleintr(int c)
 
                   // echo back to the user.
                   consputc(c);
-
+                  if(keepRunning != 0){
+                      keepRunning = 0;
+                  }
                   // store for consumption by consoleread().
                   cons.buf[cons.e++ % INPUT_BUF_SIZE] = c;
 

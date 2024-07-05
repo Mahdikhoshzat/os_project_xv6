@@ -8,6 +8,7 @@
 #include "spinlock.h"
 #include "riscv.h"
 #include "defs.h"
+#include "kalloc.h"
 
 void freerange(void *pa_start, void *pa_end);
 
@@ -27,6 +28,7 @@ void
 kinit()
 {
   initlock(&kmem.lock, "kmem");
+ kmemHelpSharedStructPtr->total_pages = 0;
   freerange(end, (void*)PHYSTOP);
 }
 
@@ -35,8 +37,11 @@ freerange(void *pa_start, void *pa_end)
 {
   char *p;
   p = (char*)PGROUNDUP((uint64)pa_start);
-  for(; p + PGSIZE <= (char*)pa_end; p += PGSIZE)
-    kfree(p);
+  for(; p + PGSIZE <= (char*)pa_end; p += PGSIZE){
+      kmemHelpSharedStructPtr->total_pages++;
+      kfree(p);
+  }
+
 }
 
 // Free the page of physical memory pointed at by pa,
@@ -72,8 +77,10 @@ kalloc(void)
 
   acquire(&kmem.lock);
   r = kmem.freelist;
-  if(r)
-    kmem.freelist = r->next;
+  if(r){
+      kmem.freelist = r->next;
+  }
+
   release(&kmem.lock);
 
   if(r)

@@ -100,10 +100,10 @@ uint64 sys_history(void) {
 
 uint64 sys_top(void){
 //    printf("\nStart\n");
-    if(((ticks - keepRunning) / 10) < 3){
-//        printf("\nExiting...\n");
-        return 0;
-    }
+//    if(((ticks - keepRunning) / 10) < 3){
+////        printf("\nExiting...\n");
+//        return 0;
+//    }
     struct top_system_struct *user_top;
     struct top_system_struct kernel_top;
     argaddr(0, (uint64 *)&user_top);
